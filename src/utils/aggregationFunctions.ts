@@ -188,9 +188,27 @@ function calculateWeeklyTrendData(
     const yoyKey = `${year - 1}-W${String(week).padStart(2, '0')}`;
     const yoyData = yoyWeekMap?.get(yoyKey);
 
+    // Format week label as date range (e.g., "29-5 Oct" or "6-12")
+    const startDate = new Date(weekStart);
+    const endDate = new Date(weekEnd);
+    const startDay = startDate.getDate();
+    const endDay = endDate.getDate();
+    const startMonth = startDate.getMonth();
+    const endMonth = endDate.getMonth();
+
+    let weekLabel: string;
+    if (startMonth !== endMonth) {
+      // Week spans two months: show "29-5 Oct"
+      const monthName = getMonthName(endMonth + 1, true);
+      weekLabel = `${startDay}-${endDay} ${monthName}`;
+    } else {
+      // Same month: show "6-12"
+      weekLabel = `${startDay}-${endDay}`;
+    }
+
     buckets.push({
       bucketKey: key,
-      bucketLabel: `W${week}`,
+      bucketLabel: weekLabel,
       startDate: weekStart,
       endDate: weekEnd,
       isInSelection,
