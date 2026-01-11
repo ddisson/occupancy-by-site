@@ -260,3 +260,78 @@
 - Performance testing with larger datasets
 - Consider implementing remaining design gaps based on priority
 - Documentation and code cleanup
+
+### Frontend Testing & Validation Framework
+
+**Documentation Created:**
+- ✅ Created `FRONTEND_TESTING.md` - Comprehensive testing and validation algorithm
+  - Defined iterative validation algorithm with 5 phases
+  - Documented target resolutions (desktop, tablet, mobile)
+  - Created automated Playwright screenshot capture script
+  - Defined severity classification system (Critical/High/Medium/Low)
+  - Established success criteria (95%+ alignment, <5% visual diff)
+  - Documented component checklist template
+  - Added measurement tools and techniques
+  - Defined resolution-specific testing notes
+
+- ✅ Created `DESIGN_CHECKLIST.md` - Live tracking document for design alignment
+  - Resolution testing status table (7 target resolutions)
+  - Component-by-component alignment checklist:
+    - Page layout & container (5 elements)
+    - Header section (6 elements)
+    - Total Occupancy chart (14 elements)
+    - Average Nightly Occupancy chart (15 elements)
+    - Occupancy Trend chart (18 elements)
+    - Data table (18 elements)
+    - Controls & filters (8 elements)
+  - Issue log with priority categorization
+  - Iteration history tracking
+  - Figma reference measurements section
+  - Alignment calculation formula
+  - Update protocol for each iteration
+
+- ✅ Updated `CLAUDE.md` - Added Design Validation Protocol
+  - New section: "Design Validation Protocol"
+  - Defined recursive design alignment rules
+  - Required documents: FRONTEND_TESTING.md and DESIGN_CHECKLIST.md
+  - Four-step validation workflow:
+    1. Before Implementation - Review and extract Figma specs
+    2. During Implementation - Fix in priority order, batch processing
+    3. After Implementation - Screenshot capture and comparison
+    4. Iteration Completion - Update checklists and commit
+  - Mandatory target resolutions list
+  - Success criteria defined
+  - Update requirements for DESIGN_CHECKLIST.md
+
+**Framework Purpose:**
+- Establish systematic approach for pixel-perfect Figma alignment
+- Create repeatable testing process across all resolutions
+- Track progress with quantifiable metrics
+- Ensure consistency in design validation workflow
+- Enable automated screenshot-based regression testing
+
+**Testing Methodology:**
+- Automated screenshot capture via Playwright
+- Manual side-by-side comparison with Figma exports
+- Visual diff percentage calculation
+- Issue prioritization and batch fixing
+- Iterative improvement until 95%+ alignment achieved
+
+**Workflow Protocol:**
+1. Extract Figma measurements and document in checklist
+2. Implement fixes in priority order (Critical → High → Medium → Low)
+3. Capture screenshots at all 7 target resolutions
+4. Compare production vs Figma and calculate visual diff
+5. Update DESIGN_CHECKLIST.md with results (⏳ → 🔧 → ✅/❌)
+6. Update CHANGELOG.md with iteration summary
+7. Git commit all changes including screenshots
+
+**Current Status:**
+- Framework ready for implementation
+- Iteration 0 (Baseline) established in DESIGN_CHECKLIST.md
+- Ready to begin Iteration 1 with screenshot capture
+
+**Next Steps:**
+- Run initial screenshot capture at all target resolutions
+- Populate Figma reference measurements in DESIGN_CHECKLIST.md
+- Begin systematic validation iterations

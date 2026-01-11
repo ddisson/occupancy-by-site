@@ -1,4 +1,4 @@
-# Implementation Steps - Occupancy by Site Report
+Okay, implement all steps from the implementation steps.md according to the product requirements and technical stack.# Implementation Steps - Occupancy by Site Report
 
 ## Phase 1: Project Setup
 
