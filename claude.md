@@ -88,6 +88,26 @@ Developer attempted to use AG-Grid for graphs, but AG-Grid is a **table/data gri
    - Fix issues in priority order: Critical → High → Medium → Low
    - Process fixes in small batches (3-5 related issues)
    - Test immediately after each batch
+   - **Apply Precision Escalation based on iteration count:**
+     - **Iterations 1-3:** Visual comparison, approximate measurements (±5px)
+     - **Iterations 4-6:** MANDATORY - Apply ALL Phase 2 techniques from FRONTEND_TESTING.md
+       - Exact pixel measurements (1px accuracy)
+       - CSS extraction from Figma Inspect
+       - Exact hex colors, typography precision
+       - Spacing system with CSS variables
+       - Overlay comparison
+     - **Iterations 7-9:** MANDATORY - Apply ALL Phase 3 techniques from FRONTEND_TESTING.md
+       - Pixel-perfect grid overlay tools
+       - Computed style comparison
+       - Sub-pixel adjustments
+       - Chart fine-tuning
+       - All interactive states validation
+       - Cross-browser verification
+     - **Iterations 10+:** MANDATORY - Apply ALL Phase 4 techniques from FRONTEND_TESTING.md
+       - Multi-resolution verification
+       - Edge case testing
+       - Accessibility audit
+       - Performance optimization
 
 3. **After Implementation:**
    - Capture screenshots at ALL target resolutions (see FRONTEND_TESTING.md)
@@ -123,8 +143,30 @@ Must validate at:
   - Status changes (⏳ → 🔧 → ✅/❌)
   - Progress percentage
   - Iteration history entry
+  - Current phase and phase checklist completion
 - Update CHANGELOG.md with iteration summary
 - Commit screenshots to repository
+
+### Escalation Protocol
+**If progress stalls, take immediate action:**
+
+**After 3 iterations with <10% improvement:**
+- Re-baseline: Capture new Figma exports
+- Audit current approach effectiveness
+- Confirm Figma design is latest version
+- Consider additional measurement tools
+- May need to rebuild component from scratch
+
+**After 6 iterations without 80% alignment:**
+- Schedule design review with designer
+- Confirm all Figma elements are technically achievable
+- Identify acceptable trade-offs
+- Consider alternative CSS techniques or libraries
+
+**After 9 iterations without 95% alignment:**
+- Revisit whether 95% is achievable/necessary
+- Document technical limitations
+- Get stakeholder approval on acceptable variance
 
 ## Documentation Protocol
 
