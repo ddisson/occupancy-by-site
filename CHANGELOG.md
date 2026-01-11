@@ -100,8 +100,78 @@
 - ✅ Vite production build: SUCCESS (1.69s)
 - ⚠️ Bundle size: 1.7MB (consider code splitting for optimization)
 
+### E2E Testing & Visual QA (Playwright)
+
+**Testing Infrastructure Setup:**
+- ✅ Installed Playwright for automated end-to-end testing
+- ✅ Configured `playwright.config.ts` with Chromium browser
+- ✅ Created comprehensive E2E test suite in `e2e/occupancy-report.spec.ts`
+- ✅ Organized tests into logical groups: Page Load, Charts, Table, Interactions, Visual Regression
+
+**Test Coverage (19 Tests - All Passing):**
+- ✅ Page structure and header validation
+- ✅ Filter bar controls and date pickers
+- ✅ Total Occupancy donut chart rendering (3 segments: ON/AN/Blocked)
+- ✅ Average Nightly Occupancy line chart (weekday breakdown + YoY)
+- ✅ Occupancy Trend bar chart (daily/weekly/monthly + YoY)
+- ✅ Data table with sortable columns and pagination
+- ✅ CSV export functionality
+- ✅ Settings modal interactions
+- ✅ Visual regression screenshots at multiple viewports (1920x1080, 1440x900)
+
+**Visual Design Comparison (Figma vs Implementation):**
+- ✅ Created detailed comparison analysis document (`e2e/visual-comparison-analysis.md`)
+- ✅ Documented 24 specific design differences across all components
+- ✅ Prioritized issues as Critical, High, Medium, Low
+- ✅ Defined clear acceptance criteria for design compliance
+
+**Critical Fixes Applied:**
+- ✅ **Background Color:** Changed from dark mode (#242424) to light mode (#f5f5f5)
+  - Updated `src/index.css` color scheme to match Figma
+  - Improved readability and professional appearance
+- ✅ **Blocked Data Visibility:** Enabled "Include Blocked days in Capacity" by default
+  - Now shows 3-segment donut chart (Occupied/Available/Blocked)
+  - Displays blocked nights count in chart details
+- ✅ **YoY Comparison:** Enabled "Show previous year comparison" feature
+  - Added Year Ago line to Average Nightly Occupancy chart
+  - Added Year Ago bars to Occupancy Trend chart
+  - Proper -364 days offset for weekday alignment
+
+**Test Updates:**
+- ✅ Fixed date format test to accept formatted dates (e.g., "Feb 1 – Mar 3, 2025")
+- ✅ Fixed settings modal test to use correct CSS selectors (.modal-overlay)
+- ✅ All 19 tests passing consistently
+
+**Screenshots Captured:**
+- `occupancy-report-fullpage-1920x1080.png` - Full page at desktop resolution
+- `occupancy-report-viewport-1920x1080.png` - Above-the-fold view
+- `occupancy-report-fullpage-1440x900.png` - Responsive layout test
+- `occupancy-report-charts-only.png` - Charts grid section
+- `occupancy-report-table-only.png` - Data table section
+- `settings-modal.png` - Settings modal interface
+- `after-background-fix.png` - Light mode implementation
+- `after-all-fixes.png` - Final state with all features enabled
+
+**Remaining Design Gaps (Not Blocking):**
+- ⚠️ Missing breadcrumb navigation ("Reports > Occupancy")
+- ⚠️ Missing table tabs ("Report" vs "Occupancy Heatmap")
+- ⚠️ Filter bar styling differences (single vs dual date inputs)
+- ⚠️ Chart controls not always visible (granularity selector, data comparison dropdown)
+
+**Test Command Added:**
+- `npm run test:e2e` - Run all E2E tests
+- `npm run test:e2e:ui` - Run tests with Playwright UI
+- `npm run test:e2e:debug` - Debug mode for test development
+
+**Outcome:**
+- ✅ **19/19 tests passing** (100% pass rate)
+- ✅ Core functionality validated and working
+- ✅ Visual design significantly improved and closer to Figma
+- ✅ Ready for stakeholder review and feedback
+
 **Next Steps:**
 - Test all features in development mode
 - Validate against PRD requirements
 - Performance testing with larger datasets
+- Consider implementing remaining design gaps based on priority
 - Documentation and code cleanup
