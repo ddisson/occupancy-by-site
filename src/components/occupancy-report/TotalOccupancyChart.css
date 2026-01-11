@@ -1,0 +1,64 @@
+.chart-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.chart-container {
+  position: relative;
+  width: 100%;
+}
+
+.center-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.center-label .percentage {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  line-height: 1;
+}
+
+.center-label .label {
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.chart-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.summary-item .label {
+  color: #666;
+  font-weight: 500;
+}
+
+.summary-item .value {
+  color: #333;
+  font-weight: 600;
+}

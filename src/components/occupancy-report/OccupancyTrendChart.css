@@ -1,0 +1,17 @@
+.trend-chart {
+  grid-column: 1 / -1; /* Span full width */
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.custom-tooltip .selection {
+  margin: 0.25rem 0;
+  color: #2E7D32;
+  font-size: 0.875rem;
+  font-style: italic;
+}

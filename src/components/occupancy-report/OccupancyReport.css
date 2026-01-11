@@ -1,0 +1,42 @@
+.occupancy-report {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.report-header {
+  margin-bottom: 1.5rem;
+}
+
+.report-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.report-header .date-range {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #666;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .report-header .date-range {
+    font-size: 1rem;
+  }
+}

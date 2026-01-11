@@ -1,0 +1,88 @@
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.filter-group label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.filter-group input[type="date"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.filter-mode-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.filter-mode-toggle button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.filter-mode-toggle button.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.filter-mode-toggle button:hover:not(.active) {
+  background-color: #f0f0f0;
+}
+
+.filter-select select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  min-width: 200px;
+  max-height: 150px;
+}
+
+.filter-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.settings-button,
+.refresh-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.settings-button:hover,
+.refresh-button:hover {
+  background-color: #f0f0f0;
+}

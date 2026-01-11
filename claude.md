@@ -95,6 +95,7 @@ This ensures a clear audit trail of project evolution and decision-making ration
 
 **When to commit:**
 - After completing a feature or component
+- After completing a phase from the [/Users/dmitrydisson/Documents/Projects/agrid_element/implementation-steps.md]
 - After fixing a bug or issue
 - After updating documentation or configuration
 - After any milestone that moves the project forward
