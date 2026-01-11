@@ -15,11 +15,15 @@ import './AverageNightlyChart.css';
 interface AverageNightlyChartProps {
   data: WeekdayChartData[];
   showYoY?: boolean;
+  selectedPeriod?: string;
+  onPeriodChange?: (period: string) => void;
 }
 
 const AverageNightlyChart: React.FC<AverageNightlyChartProps> = ({
   data,
   showYoY = false,
+  selectedPeriod = 'current-high1',
+  onPeriodChange,
 }) => {
   const chartData = data.map(day => ({
     weekday: day.weekdayName,
@@ -53,7 +57,24 @@ const AverageNightlyChart: React.FC<AverageNightlyChartProps> = ({
 
   return (
     <div className="chart-card">
-      <h3>Average Nightly Occupancy</h3>
+      <div className="chart-header">
+        <h3>Average Nightly Occupancy</h3>
+        <div className="chart-controls">
+          {onPeriodChange && (
+            <div className="period-selector">
+              <select
+                value={selectedPeriod}
+                onChange={e => onPeriodChange(e.target.value)}
+              >
+                <option value="current-high1">Current, High season 1</option>
+                <option value="current-high2">Current, High season 2</option>
+                <option value="current-low">Current, Low season</option>
+                <option value="yoy-high1">Year Ago, High season 1</option>
+              </select>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>

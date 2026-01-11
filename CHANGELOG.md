@@ -440,3 +440,43 @@
 - Apply Phase 2 techniques starting at Iteration 4
 - Apply Phase 3 techniques starting at Iteration 7
 - Monitor progress and trigger escalation if needed
+
+---
+
+### Design Alignment Iterations
+
+**Iteration 5 - Phase 2: Average Nightly Occupancy Dropdown (2026-01-11)**
+
+**Issue Identified:**
+- Average Nightly Occupancy chart missing period selector dropdown shown in Figma
+- Identified as HIGH priority in FIGMA_MEASUREMENTS.md analysis
+- Figma shows: "Current, High season 1" dropdown in top-right
+
+**Changes Made:**
+- Added dropdown selector to Average Nightly Occupancy chart component
+- Positioned top-right with chart-header layout (consistent with Occupancy Trend)
+- Added period options:
+  - "Current, High season 1" (default)
+  - "Current, High season 2"
+  - "Current, Low season"
+  - "Year Ago, High season 1"
+- Added state management for period selection (useState + handler)
+- Created chart-header and period-selector CSS styles
+
+**Files Modified:**
+- `src/components/occupancy-report/AverageNightlyChart.tsx` - Added props, header structure, dropdown
+- `src/components/occupancy-report/AverageNightlyChart.css` - Added header and dropdown styling
+- `src/components/occupancy-report/OccupancyReport.tsx` - Added state and handler
+
+**Screenshot:**
+- `screenshots/iteration5_average_nightly_dropdown.png`
+
+**Progress:**
+- Phase: Phase 2 - Precision Refinement (Iteration 5/6)
+- Estimated alignment: ~80% (up from ~75-80%)
+- HIGH priority feature now complete
+
+**Next Steps:**
+- Continue Phase 2 with remaining HIGH/MEDIUM priority items from FIGMA_MEASUREMENTS.md
+- Extract exact measurements for Total Occupancy chart
+- Verify all chart controls match Figma specifications

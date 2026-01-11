@@ -29,6 +29,7 @@ const OccupancyReportContent: React.FC = () => {
   const [sites, setSites] = useState<{ id: string; name: string; typeId: string; typeName: string }[]>([]);
   const [siteTypes, setSiteTypes] = useState<{ id: string; name: string }[]>([]);
   const [reservations, setReservations] = useState<any[]>([]);
+  const [selectedPeriod, setSelectedPeriod] = useState('current-high1');
 
   // Generate mock data on mount
   useEffect(() => {
@@ -163,6 +164,10 @@ const OccupancyReportContent: React.FC = () => {
     updateFilters({ granularity: newGranularity });
   };
 
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period);
+  };
+
   return (
     <div className="occupancy-report">
       <div className="breadcrumb">
@@ -185,7 +190,12 @@ const OccupancyReportContent: React.FC = () => {
 
       <div className="charts-grid">
         <TotalOccupancyChart data={donutData} />
-        <AverageNightlyChart data={weekdayData} showYoY={filters.showYoY} />
+        <AverageNightlyChart
+          data={weekdayData}
+          showYoY={filters.showYoY}
+          selectedPeriod={selectedPeriod}
+          onPeriodChange={handlePeriodChange}
+        />
         <OccupancyTrendChart
           data={trendData}
           showYoY={filters.showYoY}

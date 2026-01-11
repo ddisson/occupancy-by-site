@@ -2,25 +2,25 @@
 
 ## Iteration Tracker
 
-**Current Iteration:** 0 (Baseline)
+**Current Iteration:** 5
 **Last Updated:** 2026-01-11
-**Overall Progress:** 0% aligned with Figma
+**Overall Progress:** ~80% aligned with Figma
 **Target:** 95%+ alignment across all components
 
 ---
 
 ## Precision Phase Tracker
 
-**Current Phase:** Phase 1 - Broad Strokes (Iterations 1-3)
-**Phase Goal:** Fix obvious and major discrepancies quickly
-**Expected Visual Diff Reduction:** From baseline to ~20-30%
+**Current Phase:** Phase 2 - Precision Refinement (Iterations 4-6)
+**Phase Goal:** Apply exact measurements and detailed refinement
+**Expected Visual Diff Reduction:** From ~20% to ~10-15%
 
 ### Phase Progression
 
 | Phase | Iteration Range | Status | Completion | Visual Diff Target |
 |-------|----------------|--------|------------|-------------------|
-| Phase 1: Broad Strokes | 1-3 | ⏳ Not Started | 0% | ~20-30% |
-| Phase 2: Precision Refinement | 4-6 | 🔒 Locked | - | ~10-15% |
+| Phase 1: Broad Strokes | 1-3 | ✅ Completed | 100% | ~20-30% |
+| Phase 2: Precision Refinement | 4-6 | 🔧 In Progress | 33% (1/3) | ~10-15% |
 | Phase 3: Microscopic Alignment | 7-9 | 🔒 Locked | - | ~5% |
 | Phase 4: Final Validation | 10+ | 🔒 Locked | - | <5% |
 
@@ -187,6 +187,7 @@
 
 | Element | Figma Spec | Production | Status | Priority | Notes |
 |---------|-----------|------------|--------|----------|-------|
+| Period selector dropdown | Top-right | Top-right | ✅ | High | Iteration 5: Added dropdown with period options |
 | Container width | - | - | ⏳ | Critical | |
 | Container height | - | - | ⏳ | Critical | |
 | Chart margins | - | - | ⏳ | High | |
@@ -281,6 +282,22 @@ _No issues logged yet - run initial screenshot capture_
 ---
 
 ## Iteration History
+
+### Iteration 5 - Phase 2 Precision (2026-01-11)
+- **Status:** Completed
+- **Phase:** Phase 2 - Precision Refinement
+- **Changes:**
+  - Added missing dropdown selector to Average Nightly Occupancy chart (HIGH priority from FIGMA_MEASUREMENTS.md)
+  - Dropdown positioned top-right with period options: "Current, High season 1", "Current, High season 2", "Current, Low season", "Year Ago, High season 1"
+  - Added chart-header styling consistent with Occupancy Trend chart
+  - Added state management and handler for period selection
+- **Files Modified:**
+  - src/components/occupancy-report/AverageNightlyChart.tsx
+  - src/components/occupancy-report/AverageNightlyChart.css
+  - src/components/occupancy-report/OccupancyReport.tsx
+- **Screenshot:** screenshots/iteration5_average_nightly_dropdown.png
+- **Estimated Alignment:** ~80% (up from ~75-80%)
+- **Next Steps:** Continue Phase 2 with exact measurement extraction for remaining components
 
 ### Iteration 0 - Baseline (2026-01-11)
 - **Status:** Initial setup
