@@ -37,6 +37,19 @@
 - Configured git ignore for Node.js/React/Vite project
 - Pushed to GitHub remote
 
+### Workflow Improvements
+
+**Git Commit and Push Protocol Added:**
+- Added automated git workflow to CLAUDE.md
+- Rule: Commit and push after each noticeable update
+- Ensures continuous version control and backup
+- Standardized commit message format
+
+**Project Renamed:**
+- Local folder renamed from `agrid_element` to `occupancy-by-site`
+- Now matches GitHub repository name
+- All references updated
+
 **Next Steps:**
 - Phase 1: Initialize React + TypeScript + Vite project
 - Install dependencies (Recharts, AG-Grid Community, date-fns, etc.)

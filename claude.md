@@ -79,3 +79,25 @@ Developer attempted to use AG-Grid for graphs, but AG-Grid is a **table/data gri
 - API integration changes
 
 This ensures a clear audit trail of project evolution and decision-making rationale.
+
+### Git Commit and Push Protocol
+**REQUIRED:** After each noticeable update:
+1. Update `CHANGELOG.md` with the change
+2. Stage all changes with `git add .`
+3. Create a descriptive commit with the format:
+   ```
+   git commit -m "Brief summary of changes"
+   ```
+4. Push to remote repository:
+   ```
+   git push
+   ```
+
+**When to commit:**
+- After completing a feature or component
+- After fixing a bug or issue
+- After updating documentation or configuration
+- After any milestone that moves the project forward
+- Anytime changes are stable and ready to be saved
+
+This ensures continuous version control and backup of project progress.
