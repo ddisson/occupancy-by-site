@@ -27,16 +27,22 @@
 
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: 1fr 2fr; /* Total Occupancy ~33%, Average Nightly ~67% */
   gap: 1.25rem;
   margin-bottom: 1.25rem;
 }
 
-@media (max-width: 768px) {
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
+.charts-grid > .trend-chart {
+  grid-column: 1 / -1; /* Occupancy Trend spans full width */
+}
 
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr; /* Stack on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
   .report-header h1 {
     font-size: 1.5rem;
   }

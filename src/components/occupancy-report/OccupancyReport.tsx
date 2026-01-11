@@ -33,9 +33,9 @@ const OccupancyReportContent: React.FC = () => {
 
   // Generate mock data on mount
   useEffect(() => {
-    // Generate data for 400 days (covers current period + YoY period)
-    const startDate = new Date('2024-02-01');
-    const endDate = new Date('2025-03-03');
+    // Generate data for full year + YoY period (covers current year + previous year for comparison)
+    const startDate = new Date('2024-01-01');
+    const endDate = new Date('2025-12-31');
     const mockData = generateSiteNightData(startDate, endDate);
     setAllSiteNights(mockData.siteNights);
     setSites(mockData.sites);
@@ -93,9 +93,61 @@ const OccupancyReportContent: React.FC = () => {
     return calculateWeekdayData(filteredData, yoyData);
   }, [filteredData, yoyData]);
 
+  // For monthly trend view, we need full year data (not filtered by date range)
+  // so all 12 months are shown, with selection highlighting
+  const yearlyDataForTrend = useMemo(() => {
+    const year = filters.dateRange.start.getFullYear();
+    const yearStart = new Date(year, 0, 1); // Jan 1
+    const yearEnd = new Date(year, 11, 31); // Dec 31
+    
+    let yearData = adjustSiteNightsForBlockedSetting(allSiteNights, filters.includeBlocked);
+    yearData = filterByDateRange(yearData, yearStart, yearEnd);
+    
+    // Apply site/type filters
+    if (filters.siteIds.length > 0) {
+      yearData = yearData.filter(night => filters.siteIds.includes(night.siteId));
+    }
+    if (filters.siteTypeIds.length > 0) {
+      yearData = yearData.filter(night => filters.siteTypeIds.includes(night.siteTypeId));
+    }
+    
+    return yearData;
+  }, [allSiteNights, filters.dateRange.start, filters.siteIds, filters.siteTypeIds, filters.includeBlocked]);
+
+  // YoY data for full year (for monthly trend)
+  const yearlyYoyDataForTrend = useMemo(() => {
+    if (!filters.showYoY) return undefined;
+    
+    const year = filters.dateRange.start.getFullYear() - 1; // Previous year
+    const yearStart = new Date(year, 0, 1);
+    const yearEnd = new Date(year, 11, 31);
+    
+    let yearData = adjustSiteNightsForBlockedSetting(allSiteNights, filters.includeBlocked);
+    yearData = filterByDateRange(yearData, yearStart, yearEnd);
+    
+    if (filters.siteIds.length > 0) {
+      yearData = yearData.filter(night => filters.siteIds.includes(night.siteId));
+    }
+    if (filters.siteTypeIds.length > 0) {
+      yearData = yearData.filter(night => filters.siteTypeIds.includes(night.siteTypeId));
+    }
+    
+    return yearData;
+  }, [allSiteNights, filters.dateRange.start, filters.siteIds, filters.siteTypeIds, filters.includeBlocked, filters.showYoY]);
+
   const trendData = useMemo(() => {
+    const effectiveGranularity = filters.granularity === 'auto'
+      ? determineGranularity(filters.dateRange.start, filters.dateRange.end)
+      : filters.granularity;
+    
+    // For monthly view, use full year data so all 12 months are shown
+    if (effectiveGranularity === 'monthly') {
+      return calculateTrendData(yearlyDataForTrend, filters, yearlyYoyDataForTrend);
+    }
+    
+    // For weekly/daily, use filtered data as before
     return calculateTrendData(filteredData, filters, yoyData);
-  }, [filteredData, filters, yoyData]);
+  }, [filteredData, filters, yoyData, yearlyDataForTrend, yearlyYoyDataForTrend]);
 
   const tableData = useMemo(() => {
     return calculateTableData(filteredData, reservations);

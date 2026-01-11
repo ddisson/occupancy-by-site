@@ -2,16 +2,16 @@
   grid-column: 1 / -1; /* Span full width */
 }
 
-.chart-header {
+.trend-chart .chart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.chart-controls {
+.trend-chart .chart-controls {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -28,31 +28,132 @@
   cursor: pointer;
   width: 16px;
   height: 16px;
+  accent-color: #4D5D45;
 }
 
 .granularity-control {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
   font-size: 0.875rem;
 }
 
 .granularity-control label {
   color: #666;
+  font-size: 0.75rem;
 }
 
 .granularity-control select {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  border: 1px solid #E0E0E0;
   border-radius: 4px;
   font-size: 0.875rem;
   background-color: white;
   cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
 }
 
-.custom-tooltip .selection {
+.granularity-control select:focus {
+  outline: none;
+  border-color: #4D5D45;
+}
+
+/* Legend styles - positioned below the chart */
+.trend-chart .chart-legend-bottom {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  padding-left: 45px; /* Align with chart area, matching Y-axis width */
+}
+
+.trend-chart .chart-legend-bottom .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #333;
+}
+
+.trend-chart .chart-legend-bottom .legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Sticky Y-axis layout container */
+.chart-with-sticky-axis {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+/* Fixed Y-axis on the left */
+.sticky-y-axis {
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: white;
+}
+
+/* Scrollable chart container */
+.chart-scroll-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent; /* Hidden by default */
+}
+
+/* Show scrollbar on hover */
+.chart-scroll-container:hover {
+  scrollbar-color: #CCC transparent;
+}
+
+.chart-scroll-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chart-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chart-scroll-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Hidden by default */
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+/* Show scrollbar thumb on hover */
+.chart-scroll-container:hover::-webkit-scrollbar-thumb {
+  background-color: #CCC;
+}
+
+.chart-scroll-container:hover::-webkit-scrollbar-thumb:hover {
+  background-color: #AAA;
+}
+
+.chart-scroll-container.has-scroll {
+  cursor: grab;
+}
+
+.chart-scroll-container.has-scroll:active {
+  cursor: grabbing;
+}
+
+.chart-inner {
+  min-height: 280px;
+}
+
+/* Tooltip styles */
+.trend-chart .custom-tooltip .selection {
   margin: 0.25rem 0;
-  color: #2E7D32;
+  color: #4D5D45;
   font-size: 0.875rem;
   font-style: italic;
 }

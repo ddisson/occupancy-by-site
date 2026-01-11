@@ -7,10 +7,11 @@ interface TotalOccupancyChartProps {
   data: DonutChartData;
 }
 
+// Colors matching Figma design
 const COLORS = {
-  occupied: '#4CAF50',
-  available: '#E0E0E0',
-  blocked: '#D4A574',
+  occupied: '#4D5D45', // Dark olive green
+  available: '#E8E4DB', // Light beige/cream
+  blocked: '#A89F8E', // Tan/beige
 };
 
 const TotalOccupancyChart: React.FC<TotalOccupancyChartProps> = ({ data }) => {

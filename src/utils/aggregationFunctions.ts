@@ -105,7 +105,7 @@ export function calculateTrendData(
   }
 }
 
-// Calculate monthly trend data
+// Calculate monthly trend data - always generates 12 months for Year view
 function calculateMonthlyTrendData(
   siteNights: SiteNight[],
   filters: OccupancyFilters,
@@ -118,14 +118,12 @@ function calculateMonthlyTrendData(
   const selectionStart = filters.dateRange.start.toISOString().split('T')[0];
   const selectionEnd = filters.dateRange.end.toISOString().split('T')[0];
 
-  // Get all months for the year of selection start
+  // Get all 12 months for the year of selection start
   const year = filters.dateRange.start.getFullYear();
 
   for (let month = 1; month <= 12; month++) {
     const key = `${year}-${String(month).padStart(2, '0')}`;
     const monthData = monthMap.get(key);
-
-    if (!monthData) continue;
 
     const monthStart = `${key}-01`;
     const monthEnd = format(new Date(year, month, 0), 'yyyy-MM-dd');
@@ -137,18 +135,22 @@ function calculateMonthlyTrendData(
     const yoyKey = `${year - 1}-${String(month).padStart(2, '0')}`;
     const yoyData = yoyMonthMap?.get(yoyKey);
 
+    // Always include all 12 months, use 0 values if no data
+    const on = monthData?.on ?? 0;
+    const an = monthData?.an ?? 0;
+
     buckets.push({
       bucketKey: key,
       bucketLabel: getMonthName(month, true),
       startDate: monthStart,
       endDate: monthEnd,
       isInSelection,
-      fullBucketOccupancy: calculateOccupancyRate(monthData.on, monthData.an),
+      fullBucketOccupancy: calculateOccupancyRate(on, an),
       selectionOccupancy: isInSelection
-        ? calculateOccupancyRate(monthData.on, monthData.an)
+        ? calculateOccupancyRate(on, an)
         : undefined,
-      on: monthData.on,
-      an: monthData.an,
+      on,
+      an,
       yoyOccupancy: yoyData ? calculateOccupancyRate(yoyData.on, yoyData.an) : undefined,
       yoyOn: yoyData?.on,
       yoyAn: yoyData?.an,
@@ -158,7 +160,7 @@ function calculateMonthlyTrendData(
   return buckets;
 }
 
-// Calculate weekly trend data
+// Calculate weekly trend data - generates 52-53 weeks for Weekly view
 function calculateWeeklyTrendData(
   siteNights: SiteNight[],
   filters: OccupancyFilters,
@@ -172,11 +174,15 @@ function calculateWeeklyTrendData(
   const selectionEnd = filters.dateRange.end.toISOString().split('T')[0];
 
   const year = filters.dateRange.start.getFullYear();
+  
+  // Check for week 53 (some years have 53 weeks)
+  const maxWeeks = weekMap.has(`${year}-W53`) ? 53 : 52;
 
-  for (let week = 1; week <= 52; week++) {
+  for (let week = 1; week <= maxWeeks; week++) {
     const key = `${year}-W${String(week).padStart(2, '0')}`;
     const weekData = weekMap.get(key);
 
+    // Skip if no data for this week
     if (!weekData) continue;
 
     const dates = Array.from(weekData.dates).sort();
@@ -188,7 +194,7 @@ function calculateWeeklyTrendData(
     const yoyKey = `${year - 1}-W${String(week).padStart(2, '0')}`;
     const yoyData = yoyWeekMap?.get(yoyKey);
 
-    // Format week label as date range (e.g., "29-5 Oct" or "6-12")
+    // Format week label as date range (e.g., "29-5, Oct" or "6-12")
     const startDate = new Date(weekStart);
     const endDate = new Date(weekEnd);
     const startDay = startDate.getDate();
@@ -198,9 +204,9 @@ function calculateWeeklyTrendData(
 
     let weekLabel: string;
     if (startMonth !== endMonth) {
-      // Week spans two months: show "29-5 Oct"
+      // Week spans two months: show "29-5, Nov" format like Figma
       const monthName = getMonthName(endMonth + 1, true);
-      weekLabel = `${startDay}-${endDay} ${monthName}`;
+      weekLabel = `${startDay}-${endDay}, ${monthName}`;
     } else {
       // Same month: show "6-12"
       weekLabel = `${startDay}-${endDay}`;

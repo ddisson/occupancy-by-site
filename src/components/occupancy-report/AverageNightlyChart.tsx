@@ -6,11 +6,16 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 import { WeekdayChartData } from '../../types/occupancy.types';
 import './AverageNightlyChart.css';
+
+// Colors matching Figma design
+const CHART_COLORS = {
+  currentPeriod: '#4D5D45', // Dark olive green
+  comparison: '#A89F8E', // Tan/beige for comparison
+};
 
 interface AverageNightlyChartProps {
   data: WeekdayChartData[];
@@ -56,12 +61,13 @@ const AverageNightlyChart: React.FC<AverageNightlyChartProps> = ({
   };
 
   return (
-    <div className="chart-card">
+    <div className="chart-card average-nightly-chart">
       <div className="chart-header">
         <h3>Average Nightly Occupancy</h3>
         <div className="chart-controls">
           {onPeriodChange && (
             <div className="period-selector">
+              <label>Select data</label>
               <select
                 value={selectedPeriod}
                 onChange={e => onPeriodChange(e.target.value)}
@@ -75,37 +81,59 @@ const AverageNightlyChart: React.FC<AverageNightlyChartProps> = ({
           )}
         </div>
       </div>
+      
+      {/* Legend */}
+      <div className="chart-legend">
+        <div className="legend-item">
+          <span className="legend-line" style={{ backgroundColor: CHART_COLORS.currentPeriod }}></span>
+          <span>Current period</span>
+        </div>
+        {showYoY && (
+          <div className="legend-item">
+            <span className="legend-line" style={{ backgroundColor: CHART_COLORS.comparison }}></span>
+            <span>High season 2</span>
+          </div>
+        )}
+      </div>
+
       <div className="chart-container">
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="weekday" />
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E5E5" />
+            <XAxis 
+              dataKey="weekday" 
+              axisLine={{ stroke: '#E5E5E5' }}
+              tickLine={false}
+              tick={{ fontSize: 12, fill: '#666' }}
+            />
             <YAxis
               domain={[0, 100]}
               tickFormatter={value => `${value}%`}
-              label={{ value: 'Occupancy %', angle: -90, position: 'insideLeft' }}
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11, fill: '#666' }}
+              ticks={[0, 25, 50, 75, 100]}
+              width={40}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
             <Line
               type="monotone"
               dataKey="current"
-              stroke="#4CAF50"
+              stroke={CHART_COLORS.currentPeriod}
               strokeWidth={2}
-              name="Current Period"
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
+              name="Current period"
+              dot={{ r: 4, fill: CHART_COLORS.currentPeriod, strokeWidth: 0 }}
+              activeDot={{ r: 6, fill: CHART_COLORS.currentPeriod, strokeWidth: 0 }}
             />
             {showYoY && (
               <Line
                 type="monotone"
                 dataKey="yoy"
-                stroke="#D4A574"
+                stroke={CHART_COLORS.comparison}
                 strokeWidth={2}
-                strokeDasharray="5 5"
-                name="Year Ago"
-                dot={{ r: 4 }}
-                activeDot={{ r: 6 }}
+                name="High season 2"
+                dot={{ r: 4, fill: CHART_COLORS.comparison, strokeWidth: 0 }}
+                activeDot={{ r: 6, fill: CHART_COLORS.comparison, strokeWidth: 0 }}
               />
             )}
           </LineChart>

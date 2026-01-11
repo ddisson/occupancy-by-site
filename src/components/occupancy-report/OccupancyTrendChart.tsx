@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -6,12 +6,24 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  ResponsiveContainer,
   Cell,
 } from 'recharts';
 import { TrendBucketData, Granularity } from '../../types/occupancy.types';
 import './OccupancyTrendChart.css';
+
+// Colors matching Figma design
+const CHART_COLORS = {
+  currentPeriod: '#4D5D45', // Dark olive green
+  currentPeriodFaded: 'rgba(77, 93, 69, 0.5)', // Faded for non-selected
+  previousPeriod: '#A89F8E', // Tan/beige for previous period
+  previousPeriodFaded: 'rgba(168, 159, 142, 0.5)',
+};
+
+// Chart dimensions constants
+const CHART_HEIGHT = 280;
+const Y_AXIS_WIDTH = 45;
+const X_AXIS_HEIGHT_DAILY = 60;
+const X_AXIS_HEIGHT_DEFAULT = 30;
 
 interface OccupancyTrendChartProps {
   data: TrendBucketData[];
@@ -28,7 +40,9 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
   onToggleYoY,
   onGranularityChange,
 }) => {
-  const chartData = data.map(bucket => ({
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const chartData = useMemo(() => data.map(bucket => ({
     label: bucket.bucketLabel,
     current: bucket.fullBucketOccupancy,
     yoy: bucket.yoyOccupancy,
@@ -38,7 +52,43 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
     yoyOn: bucket.yoyOn,
     yoyAn: bucket.yoyAn,
     selectionOccupancy: bucket.selectionOccupancy,
-  }));
+  })), [data]);
+
+  // Calculate chart dimensions based on granularity and data count
+  const { chartWidth, barSize, needsScroll } = useMemo(() => {
+    const dataCount = chartData.length;
+    
+    // Bar widths depend on granularity and whether showing YoY
+    let minBarWidth: number;
+    if (granularity === 'monthly') {
+      minBarWidth = showYoY ? 40 : 60; // Wider bars for 12 months
+    } else if (granularity === 'weekly') {
+      minBarWidth = showYoY ? 20 : 28; // Smaller for 52 weeks
+    } else {
+      minBarWidth = showYoY ? 16 : 24; // Smallest for daily
+    }
+    
+    const groupGap = granularity === 'monthly' ? 24 : 12;
+    
+    // Calculate minimum width needed for all bars
+    const barsPerGroup = showYoY ? 2 : 1;
+    const groupWidth = (minBarWidth * barsPerGroup) + (showYoY ? 4 : 0) + groupGap;
+    const calculatedWidth = dataCount * groupWidth + 60; // 60px for padding
+    
+    // Container width threshold (approximate visible area minus Y-axis)
+    const containerWidth = 850;
+    
+    // Always scroll for weekly (52 weeks) and daily views
+    const shouldScroll = granularity !== 'monthly' || calculatedWidth > containerWidth;
+    
+    return {
+      chartWidth: Math.max(calculatedWidth, containerWidth),
+      barSize: minBarWidth,
+      needsScroll: shouldScroll && calculatedWidth > containerWidth,
+    };
+  }, [chartData.length, showYoY, granularity]);
+
+  const bottomMargin = granularity === 'daily' ? X_AXIS_HEIGHT_DAILY : X_AXIS_HEIGHT_DEFAULT;
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -96,42 +146,105 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
           )}
         </div>
       </div>
-      <div className="chart-container">
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis
-              dataKey="label"
-              angle={granularity === 'daily' ? -45 : 0}
-              textAnchor={granularity === 'daily' ? 'end' : 'middle'}
-              height={granularity === 'daily' ? 80 : 50}
-            />
+
+      {/* Chart area with sticky Y-axis */}
+      <div className="chart-with-sticky-axis">
+        {/* Fixed Y-axis - always visible */}
+        <div className="sticky-y-axis">
+          <BarChart
+            data={chartData.slice(0, 1)} // Minimal data for Y-axis reference
+            width={Y_AXIS_WIDTH}
+            height={CHART_HEIGHT}
+            margin={{ top: 10, right: 0, left: 0, bottom: bottomMargin }}
+          >
             <YAxis
               domain={[0, 100]}
               tickFormatter={value => `${value}%`}
-              label={{ value: 'Occupancy %', angle: -90, position: 'insideLeft' }}
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11, fill: '#666' }}
+              ticks={[0, 25, 50, 75, 100]}
+              width={Y_AXIS_WIDTH}
+              orientation="left"
             />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            <Bar dataKey="current" name="Current Period" radius={[4, 4, 0, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={entry.isSelected ? '#D4A574' : 'rgba(212, 165, 116, 0.5)'}
-                />
-              ))}
-            </Bar>
-            {showYoY && (
-              <Bar
-                dataKey="yoy"
-                name="Year Ago"
-                fill="#4D8C57"
-                radius={[4, 4, 0, 0]}
-                opacity={0.8}
-              />
-            )}
           </BarChart>
-        </ResponsiveContainer>
+        </div>
+
+        {/* Scrollable chart area */}
+        <div 
+          className={`chart-scroll-container ${needsScroll ? 'has-scroll' : ''}`}
+          ref={scrollContainerRef}
+        >
+          <div 
+            className="chart-inner" 
+            style={{ width: chartWidth, minWidth: chartWidth }}
+          >
+            <BarChart 
+              data={chartData} 
+              width={chartWidth}
+              height={CHART_HEIGHT}
+              margin={{ top: 10, right: 20, left: 0, bottom: bottomMargin }}
+              barGap={showYoY ? 2 : 0}
+              barCategoryGap={showYoY ? '15%' : '25%'}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E5E5" />
+              <XAxis
+                dataKey="label"
+                axisLine={{ stroke: '#E5E5E5' }}
+                tickLine={false}
+                tick={{ fontSize: 11, fill: '#666' }}
+                angle={granularity === 'daily' ? -45 : 0}
+                textAnchor={granularity === 'daily' ? 'end' : 'middle'}
+                interval={0}
+              />
+              {/* Hidden Y-axis - just for chart alignment */}
+              <YAxis
+                domain={[0, 100]}
+                axisLine={false}
+                tickLine={false}
+                tick={false}
+                width={0}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Bar 
+                dataKey="current" 
+                name="Current period" 
+                radius={[2, 2, 0, 0]}
+                maxBarSize={barSize}
+              >
+                {chartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-current-${index}`}
+                    fill={entry.isSelected ? CHART_COLORS.currentPeriod : CHART_COLORS.currentPeriodFaded}
+                  />
+                ))}
+              </Bar>
+              {showYoY && (
+                <Bar
+                  dataKey="yoy"
+                  name="Previous period"
+                  radius={[2, 2, 0, 0]}
+                  maxBarSize={barSize}
+                  fill={CHART_COLORS.previousPeriod} // Always same color for previous period
+                />
+              )}
+            </BarChart>
+          </div>
+        </div>
+      </div>
+
+      {/* Legend below the chart */}
+      <div className="chart-legend-bottom">
+        <div className="legend-item">
+          <span className="legend-dot" style={{ backgroundColor: CHART_COLORS.currentPeriod }}></span>
+          <span>Current period</span>
+        </div>
+        {showYoY && (
+          <div className="legend-item">
+            <span className="legend-dot" style={{ backgroundColor: CHART_COLORS.previousPeriod }}></span>
+            <span>Previous period</span>
+          </div>
+        )}
       </div>
     </div>
   );
