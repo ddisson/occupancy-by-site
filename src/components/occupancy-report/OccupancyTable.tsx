@@ -124,9 +124,16 @@ const OccupancyTable: React.FC<OccupancyTableProps> = ({ data, onExportCSV }) =>
   return (
     <div className="occupancy-table-container">
       <div className="table-header">
-        <h3>Site Details</h3>
+        <div className="table-tabs">
+          <button className="tab-button active">Report</button>
+          <button className="tab-button">Occupancy Heatmap</button>
+        </div>
         <button onClick={onExportCSV} className="export-button">
-          📥 Export CSV
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 11L4 7H6.5V3H9.5V7H12L8 11Z" fill="currentColor"/>
+            <path d="M3 13H13V14H3V13Z" fill="currentColor"/>
+          </svg>
+          CSV
         </button>
       </div>
       <div className="ag-theme-alpine" style={{ height: 500, width: '100%' }}>

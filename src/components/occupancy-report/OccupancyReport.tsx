@@ -23,7 +23,7 @@ import { SiteNight } from '../../types/occupancy.types';
 import './OccupancyReport.css';
 
 const OccupancyReportContent: React.FC = () => {
-  const { filters } = useOccupancyFilters();
+  const { filters, updateFilters } = useOccupancyFilters();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [allSiteNights, setAllSiteNights] = useState<SiteNight[]>([]);
   const [sites, setSites] = useState<{ id: string; name: string; typeId: string; typeName: string }[]>([]);
@@ -152,13 +152,25 @@ const OccupancyReportContent: React.FC = () => {
     setReservations(mockData.reservations);
   };
 
+  const handleToggleYoY = () => {
+    updateFilters({ showYoY: !filters.showYoY });
+  };
+
+  const handleGranularityChange = (newGranularity: Exclude<typeof filters.granularity, 'auto'>) => {
+    updateFilters({ granularity: newGranularity });
+  };
+
   return (
     <div className="occupancy-report">
+      <div className="breadcrumb">
+        <span>Reports</span>
+        <span className="separator"> &gt; </span>
+        <span>Occupancy</span>
+      </div>
       <div className="report-header">
-        <h1>Occupancy by Site Report</h1>
-        <p className="date-range">
-          {formatDateRange(filters.dateRange.start, filters.dateRange.end)}
-        </p>
+        <h1>
+          Occupancy: {formatDateRange(filters.dateRange.start, filters.dateRange.end)}
+        </h1>
       </div>
 
       <FilterBar
@@ -175,6 +187,8 @@ const OccupancyReportContent: React.FC = () => {
           data={trendData}
           showYoY={filters.showYoY}
           granularity={granularity}
+          onToggleYoY={handleToggleYoY}
+          onGranularityChange={handleGranularityChange}
         />
       </div>
 

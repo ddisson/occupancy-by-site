@@ -169,6 +169,91 @@
 - ✅ Visual design significantly improved and closer to Figma
 - ✅ Ready for stakeholder review and feedback
 
+### Design Iterations (Figma Alignment)
+
+**Objective:** Minimize visual differences between production and Figma design through systematic iterations
+
+**Iteration 1: Navigation and Header Improvements**
+- ✅ Added breadcrumb navigation ("Reports > Occupancy")
+  - Updated `OccupancyReport.tsx` and `OccupancyReport.css`
+  - Matches Figma navigation pattern
+- ✅ Changed title format to include date inline
+  - From: "Occupancy by Site Report" (separate date display)
+  - To: "Occupancy: Feb 1 – Mar 3, 2025 (30 nights)"
+- ✅ Converted settings and refresh to icon-only buttons
+  - Removed text labels, kept icons (⚙️ and 🔄)
+  - Added proper title and aria-label attributes for accessibility
+
+**Iteration 2: Typography and Tab Navigation**
+- ✅ Lowercased chart titles to match Figma
+  - "Total occupancy" (was "Total Occupancy")
+  - "Occupancy trend" (was "Occupancy Trend")
+- ✅ Simplified "Average Nightly Occupancy" title
+  - Removed "by Weekday" suffix
+- ✅ Added table tabs
+  - "Report" (active) and "Occupancy Heatmap" tabs
+  - Updated `OccupancyTable.tsx` and `OccupancyTable.css`
+  - Matches Figma table navigation pattern
+
+**Iteration 3: Filter UX Improvements**
+- ✅ Changed multi-select list to dropdown with "All" option
+  - Replaced checkbox-style multi-select with single-select dropdown
+  - Added "All" option for clearing filters
+  - Updated `FilterBar.tsx` to use standard HTML select element
+- ✅ Improved filter styling
+  - Custom dropdown arrow icon
+  - Cleaner visual hierarchy
+  - Better label consistency ("Select unit:")
+
+**Iteration 4: Polish and Details**
+- ✅ Added download icon to CSV export button
+  - Implemented SVG download icon in `OccupancyTable.tsx`
+  - Icon shows arrow pointing down to represent download action
+- ✅ Fixed label casing consistency
+  - Changed "Select Unit:" to "Select unit:"
+  - Matches Figma's lowercase styling
+
+**Iteration 5: Controls and Legend Enhancements**
+- ✅ Changed CSV button color from green to gray/neutral
+  - Updated `OccupancyTable.css` background and border colors
+  - Better visual hierarchy (export is secondary action)
+- ✅ Improved Total Occupancy chart legend
+  - Updated legend format to "Nights occupied 385" (from "Occupied")
+  - Custom legend renderer in `TotalOccupancyChart.tsx`
+  - Better matches Figma's legend styling
+- ✅ Added visible controls to Occupancy Trend chart
+  - "Previous period" checkbox for YoY comparison toggle
+  - "Show data by" dropdown for granularity selection (Days/Weeks/Months)
+  - Updated `OccupancyTrendChart.tsx` with chart-header controls
+  - Updated `OccupancyReport.tsx` to handle control interactions
+  - Previously these were hidden in settings modal
+
+**Files Modified Across Iterations:**
+- `src/components/occupancy-report/OccupancyReport.tsx`
+- `src/components/occupancy-report/OccupancyReport.css`
+- `src/components/occupancy-report/FilterBar.tsx`
+- `src/components/occupancy-report/FilterBar.css`
+- `src/components/occupancy-report/OccupancyTable.tsx`
+- `src/components/occupancy-report/OccupancyTable.css`
+- `src/components/occupancy-report/TotalOccupancyChart.tsx`
+- `src/components/occupancy-report/TotalOccupancyChart.css`
+- `src/components/occupancy-report/AverageNightlyChart.tsx`
+- `src/components/occupancy-report/OccupancyTrendChart.tsx`
+- `src/components/occupancy-report/OccupancyTrendChart.css`
+
+**Screenshots Captured:**
+- `e2e/screenshots/iteration-4-after.png` - State after iteration 4
+- `e2e/screenshots/iteration-5-after.png` - Final state after all iterations
+- `e2e/screenshots/iteration-5-yoy-enabled.png` - YoY comparison enabled
+- `e2e/screenshots/iteration-5-weekly-view.png` - Weekly granularity view
+
+**Outcome:**
+- ✅ Significantly reduced visual gap between Figma and production
+- ✅ All major structural elements now match Figma design
+- ✅ Improved UX with visible, accessible controls
+- ✅ Better design consistency across components
+- ✅ Maintained all functionality while improving visual fidelity
+
 **Next Steps:**
 - Test all features in development mode
 - Validate against PRD requirements

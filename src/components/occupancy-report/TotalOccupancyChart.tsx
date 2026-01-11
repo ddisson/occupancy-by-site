@@ -15,7 +15,7 @@ const COLORS = {
 
 const TotalOccupancyChart: React.FC<TotalOccupancyChartProps> = ({ data }) => {
   const chartData = [
-    { name: 'Occupied', value: data.occupied, color: COLORS.occupied },
+    { name: 'Nights occupied', value: data.occupied, color: COLORS.occupied },
     { name: 'Available', value: data.available, color: COLORS.available },
   ];
 
@@ -25,9 +25,23 @@ const TotalOccupancyChart: React.FC<TotalOccupancyChartProps> = ({ data }) => {
 
   const totalNights = chartData.reduce((sum, entry) => sum + entry.value, 0);
 
+  const renderLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <ul className="custom-legend">
+        {payload.map((entry: any, index: number) => (
+          <li key={`legend-${index}`} style={{ color: entry.color }}>
+            <span className="legend-icon" style={{ backgroundColor: entry.color }}></span>
+            {entry.value} {chartData[index].value}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <div className="chart-card">
-      <h3>Total Occupancy</h3>
+      <h3>Total occupancy</h3>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
@@ -51,7 +65,7 @@ const TotalOccupancyChart: React.FC<TotalOccupancyChartProps> = ({ data }) => {
                 name,
               ]}
             />
-            <Legend />
+            <Legend content={renderLegend} />
           </PieChart>
         </ResponsiveContainer>
         <div className="center-label">

@@ -56,63 +56,62 @@ const FilterBar: React.FC<FilterBarProps> = ({
             className={filterMode === 'site' ? 'active' : ''}
             onClick={() => setFilterMode('site')}
           >
-            By Site
+            Site
           </button>
           <button
             className={filterMode === 'type' ? 'active' : ''}
             onClick={() => setFilterMode('type')}
           >
-            By Type
+            Type
           </button>
         </div>
+      </div>
 
+      <div className="filter-group filter-dropdown-group">
+        <label htmlFor="filter-select">Select unit:</label>
         {filterMode === 'site' && (
-          <div className="filter-select">
-            <select
-              multiple
-              value={filters.siteIds}
-              onChange={e => {
-                const selected = Array.from(e.target.selectedOptions, option => option.value);
-                updateFilters({ siteIds: selected });
-              }}
-            >
-              <option value="">All Sites</option>
-              {sites.map(site => (
-                <option key={site.id} value={site.id}>
-                  {site.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            id="filter-select"
+            className="filter-dropdown"
+            value={filters.siteIds.length > 0 ? filters.siteIds[0] : ''}
+            onChange={e => {
+              updateFilters({ siteIds: e.target.value ? [e.target.value] : [] });
+            }}
+          >
+            <option value="">All</option>
+            {sites.map(site => (
+              <option key={site.id} value={site.id}>
+                {site.name}
+              </option>
+            ))}
+          </select>
         )}
 
         {filterMode === 'type' && (
-          <div className="filter-select">
-            <select
-              multiple
-              value={filters.siteTypeIds}
-              onChange={e => {
-                const selected = Array.from(e.target.selectedOptions, option => option.value);
-                updateFilters({ siteTypeIds: selected });
-              }}
-            >
-              <option value="">All Types</option>
-              {siteTypes.map(type => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <select
+            id="filter-select"
+            className="filter-dropdown"
+            value={filters.siteTypeIds.length > 0 ? filters.siteTypeIds[0] : ''}
+            onChange={e => {
+              updateFilters({ siteTypeIds: e.target.value ? [e.target.value] : [] });
+            }}
+          >
+            <option value="">All</option>
+            {siteTypes.map(type => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </select>
         )}
       </div>
 
       <div className="filter-actions">
-        <button onClick={onOpenSettings} className="settings-button" title="Settings">
-          ⚙️ Settings
+        <button onClick={onOpenSettings} className="settings-button" title="Settings" aria-label="Settings">
+          ⚙️
         </button>
-        <button onClick={onRefresh} className="refresh-button" title="Refresh">
-          🔄 Refresh
+        <button onClick={onRefresh} className="refresh-button" title="Refresh" aria-label="Refresh">
+          🔄
         </button>
       </div>
     </div>

@@ -4,20 +4,25 @@
   padding: 1rem;
 }
 
+.breadcrumb {
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.breadcrumb .separator {
+  margin: 0 0.5rem;
+}
+
 .report-header {
   margin-bottom: 1.5rem;
 }
 
 .report-header h1 {
-  margin: 0 0 0.5rem 0;
-  font-size: 2rem;
-  color: #333;
-}
-
-.report-header .date-range {
   margin: 0;
-  font-size: 1.125rem;
-  color: #666;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
 }
 
 .charts-grid {

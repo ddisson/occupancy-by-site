@@ -53,7 +53,7 @@ const AverageNightlyChart: React.FC<AverageNightlyChartProps> = ({
 
   return (
     <div className="chart-card">
-      <h3>Average Nightly Occupancy by Weekday</h3>
+      <h3>Average Nightly Occupancy</h3>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>

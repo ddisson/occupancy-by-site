@@ -17,12 +17,16 @@ interface OccupancyTrendChartProps {
   data: TrendBucketData[];
   showYoY?: boolean;
   granularity: Exclude<Granularity, 'auto'>;
+  onToggleYoY?: () => void;
+  onGranularityChange?: (granularity: Exclude<Granularity, 'auto'>) => void;
 }
 
 const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
   data,
   showYoY = false,
   granularity,
+  onToggleYoY,
+  onGranularityChange,
 }) => {
   const chartData = data.map(bucket => ({
     label: bucket.bucketLabel,
@@ -64,7 +68,33 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
   return (
     <div className="chart-card trend-chart">
       <div className="chart-header">
-        <h3>Occupancy Trend - {granularity.charAt(0).toUpperCase() + granularity.slice(1)}</h3>
+        <h3>Occupancy trend</h3>
+        <div className="chart-controls">
+          {onToggleYoY && (
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={showYoY}
+                onChange={onToggleYoY}
+              />
+              Previous period
+            </label>
+          )}
+          {onGranularityChange && (
+            <div className="granularity-control">
+              <label htmlFor="granularity-select">Show data by</label>
+              <select
+                id="granularity-select"
+                value={granularity}
+                onChange={e => onGranularityChange(e.target.value as Exclude<Granularity, 'auto'>)}
+              >
+                <option value="daily">Days</option>
+                <option value="weekly">Weeks</option>
+                <option value="monthly">Months</option>
+              </select>
+            </div>
+          )}
+        </div>
       </div>
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={300}>
