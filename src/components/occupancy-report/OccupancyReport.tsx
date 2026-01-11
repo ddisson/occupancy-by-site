@@ -32,7 +32,10 @@ const OccupancyReportContent: React.FC = () => {
 
   // Generate mock data on mount
   useEffect(() => {
-    const mockData = generateSiteNightData();
+    // Generate data for 400 days (covers current period + YoY period)
+    const startDate = new Date('2024-02-01');
+    const endDate = new Date('2025-03-03');
+    const mockData = generateSiteNightData(startDate, endDate);
     setAllSiteNights(mockData.siteNights);
     setSites(mockData.sites);
     setSiteTypes(getSiteTypes());

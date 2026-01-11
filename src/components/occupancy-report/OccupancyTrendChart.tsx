@@ -117,7 +117,7 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
               {chartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.isSelected ? '#4CAF50' : 'rgba(76, 175, 80, 0.4)'}
+                  fill={entry.isSelected ? '#D4A574' : 'rgba(212, 165, 116, 0.5)'}
                 />
               ))}
             </Bar>
@@ -125,9 +125,9 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
               <Bar
                 dataKey="yoy"
                 name="Year Ago"
-                fill="#D4A574"
+                fill="#4D8C57"
                 radius={[4, 4, 0, 0]}
-                opacity={0.7}
+                opacity={0.8}
               />
             )}
           </BarChart>

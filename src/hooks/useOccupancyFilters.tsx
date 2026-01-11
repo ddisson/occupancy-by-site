@@ -10,15 +10,15 @@ const defaultFilters: OccupancyFilters = {
   },
   siteIds: [],
   siteTypeIds: [],
-  includeBlocked: false,
-  showYoY: false,
+  includeBlocked: true,
+  showYoY: true,
   granularity: 'auto',
   tails: 2,
 };
 
 const defaultSettings: OccupancySettings = {
-  includeBlocked: false,
-  showYoY: false,
+  includeBlocked: true,
+  showYoY: true,
   normalizeFebruary: false,
   granularity: 'auto',
   tails: 2,
