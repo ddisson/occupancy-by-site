@@ -2,25 +2,25 @@ import { useState, createContext, useContext, ReactNode } from 'react';
 import { OccupancyFilters, OccupancySettings } from '../types/occupancy.types';
 import { addDays } from 'date-fns';
 
-// Default filter values
+// Default filter values - matching Figma design baseline
 const defaultFilters: OccupancyFilters = {
   dateRange: {
-    start: new Date('2025-02-01'),
-    end: addDays(new Date('2025-02-01'), 30),
+    start: new Date('2025-02-27'),
+    end: new Date('2025-03-26'), // 30 nights as shown in Figma
   },
   siteIds: [],
   siteTypeIds: [],
   includeBlocked: true,
-  showYoY: true,
-  granularity: 'auto',
+  showYoY: false, // Match Figma: Previous period unchecked
+  granularity: 'monthly', // Match Figma: Show data by Months
   tails: 2,
 };
 
 const defaultSettings: OccupancySettings = {
   includeBlocked: true,
-  showYoY: true,
+  showYoY: false,
   normalizeFebruary: false,
-  granularity: 'auto',
+  granularity: 'monthly',
   tails: 2,
   exportOptions: 'table-only',
 };

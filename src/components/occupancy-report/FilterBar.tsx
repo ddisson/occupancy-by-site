@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useOccupancyFilters } from '../../hooks/useOccupancyFilters';
+import DateRangePicker from './DateRangePicker';
 import './FilterBar.css';
 
 interface FilterBarProps {
@@ -18,57 +19,27 @@ const FilterBar: React.FC<FilterBarProps> = ({
   const { filters, updateFilters } = useOccupancyFilters();
   const [filterMode, setFilterMode] = useState<'site' | 'type'>('site');
 
-  const handleDateChange = (field: 'start' | 'end', value: string) => {
-    const newDate = new Date(value);
+  const handleDateRangeChange = (start: Date, end: Date) => {
     updateFilters({
-      dateRange: {
-        ...filters.dateRange,
-        [field]: newDate,
-      },
+      dateRange: { start, end },
     });
   };
 
   return (
     <div className="filter-bar">
+      {/* Date Range Picker */}
       <div className="filter-group">
-        <label>
-          Start Date:
-          <input
-            type="date"
-            value={filters.dateRange.start.toISOString().split('T')[0]}
-            onChange={e => handleDateChange('start', e.target.value)}
-          />
-        </label>
-
-        <label>
-          End Date:
-          <input
-            type="date"
-            value={filters.dateRange.end.toISOString().split('T')[0]}
-            onChange={e => handleDateChange('end', e.target.value)}
-          />
-        </label>
+        <DateRangePicker
+          startDate={filters.dateRange.start}
+          endDate={filters.dateRange.end}
+          onChange={handleDateRangeChange}
+          label="Select date period"
+        />
       </div>
 
-      <div className="filter-group">
-        <div className="filter-mode-toggle">
-          <button
-            className={filterMode === 'site' ? 'active' : ''}
-            onClick={() => setFilterMode('site')}
-          >
-            Site
-          </button>
-          <button
-            className={filterMode === 'type' ? 'active' : ''}
-            onClick={() => setFilterMode('type')}
-          >
-            Type
-          </button>
-        </div>
-      </div>
-
+      {/* Select Unit - stacked layout like Figma */}
       <div className="filter-group filter-dropdown-group">
-        <label htmlFor="filter-select">Select unit:</label>
+        <span className="filter-dropdown-label">Select unit</span>
         {filterMode === 'site' && (
           <select
             id="filter-select"
@@ -106,6 +77,25 @@ const FilterBar: React.FC<FilterBarProps> = ({
         )}
       </div>
 
+      {/* Site/Type Toggle - moved to right side like Figma */}
+      <div className="filter-group filter-toggle-group">
+        <div className="filter-mode-toggle">
+          <button
+            className={filterMode === 'site' ? 'active' : ''}
+            onClick={() => setFilterMode('site')}
+          >
+            Site
+          </button>
+          <button
+            className={filterMode === 'type' ? 'active' : ''}
+            onClick={() => setFilterMode('type')}
+          >
+            Type
+          </button>
+        </div>
+      </div>
+
+      {/* Settings & Refresh */}
       <div className="filter-actions">
         <button onClick={onOpenSettings} className="settings-button" title="Settings" aria-label="Settings">
           ⚙️

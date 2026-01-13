@@ -1,9 +1,8 @@
 .filter-bar {
   display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f5f5f5;
-  border-radius: 8px;
+  gap: 1.5rem;
+  padding: 0;
+  background: transparent;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   align-items: center;
@@ -30,64 +29,153 @@
   font-size: 0.875rem;
 }
 
+/* Date period picker - Figma style */
+.date-period-group {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.filter-label {
+  font-size: 0.75rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.date-period-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.875rem;
+  color: #333;
+  min-width: 160px;
+  cursor: pointer;
+  position: relative;
+}
+
+.date-period-picker:hover {
+  border-color: #aaa;
+}
+
+/* Overlay date inputs that are clickable */
+.date-input-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.date-input-overlay.date-input-end {
+  left: 50%;
+}
+
+.date-range-display {
+  flex: 1;
+  pointer-events: none;
+}
+
+.calendar-icon {
+  font-size: 1rem;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .filter-mode-toggle {
   display: flex;
   gap: 0;
-  border: 1px solid #ccc;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .filter-mode-toggle button {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   border: none;
-  background: white;
+  background: #4D5D45;
+  color: white;
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.filter-mode-toggle button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.filter-mode-toggle button:last-child {
+  border-radius: 0 4px 4px 0;
 }
 
 .filter-mode-toggle button.active {
-  background-color: #e0e0e0;
-  color: #333;
-  border: 1px solid #999;
+  background-color: #4D5D45;
+  opacity: 1;
+}
+
+.filter-mode-toggle button:not(.active) {
+  background-color: #666;
+  opacity: 0.7;
 }
 
 .filter-mode-toggle button:hover:not(.active) {
-  background-color: #f0f0f0;
+  opacity: 0.85;
 }
 
+/* Select unit dropdown - stacked layout matching Figma */
 .filter-dropdown-group {
-  margin-left: auto;
-  margin-right: 0.5rem;
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
 }
 
-.filter-dropdown-group label {
-  font-size: 0.875rem;
-  color: #666;
+.filter-dropdown-label {
+  font-size: 12px;
   font-weight: 400;
-  margin: 0;
+  color: #7f7f7f;
+  line-height: 1.4;
+}
+
+/* Site/Type toggle - pushed to right side */
+.filter-toggle-group {
+  margin-left: auto;
 }
 
 .filter-dropdown {
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  min-width: 120px;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #232323;
+  min-width: 160px;
   background-color: white;
   cursor: pointer;
   appearance: none;
   background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"%3E%3Cpath fill="%23333" d="M6 9L1 4h10z"/%3E%3C/svg%3E');
   background-repeat: no-repeat;
-  background-position: right 0.5rem center;
+  background-position: right 12px center;
+  transition: border-color 0.2s ease;
+}
+
+.filter-dropdown:hover {
+  border-color: #a0a0a0;
+}
+
+.filter-dropdown:focus {
+  border-color: #23410a;
+  outline: none;
 }
 
 .filter-actions {
-  margin-left: auto;
   display: flex;
   gap: 0.5rem;
 }

@@ -150,6 +150,11 @@
   min-height: 280px;
 }
 
+/* Responsive container for monthly view */
+.chart-responsive-container {
+  width: 100%;
+}
+
 /* Tooltip styles */
 .trend-chart .custom-tooltip .selection {
   margin: 0.25rem 0;

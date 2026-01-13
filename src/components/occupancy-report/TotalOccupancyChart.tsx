@@ -41,54 +41,50 @@ const TotalOccupancyChart: React.FC<TotalOccupancyChartProps> = ({ data }) => {
   };
 
   return (
-    <div className="chart-card">
+    <div className="chart-card total-occupancy-chart">
       <h3>Total occupancy</h3>
-      <div className="chart-container">
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              paddingAngle={2}
-              dataKey="value"
-              label={entry => `${entry.name}: ${entry.value}`}
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value: number, name: string) => [
-                `${value} nights (${((value / totalNights) * 100).toFixed(1)}%)`,
-                name,
-              ]}
-            />
-            <Legend content={renderLegend} />
-          </PieChart>
-        </ResponsiveContainer>
-        <div className="center-label">
-          <div className="percentage">{data.occupancyPercentage.toFixed(1)}%</div>
-          <div className="label">Occupancy</div>
+      <div className="chart-content-row">
+        <div className="chart-container">
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number, name: string) => [
+                  `${value} nights (${((value / totalNights) * 100).toFixed(1)}%)`,
+                  name,
+                ]}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="center-label">
+            <div className="percentage">{data.occupancyPercentage.toFixed(1)}%</div>
+          </div>
+        </div>
+        <div className="chart-legend-side">
+          <div className="legend-item">
+            <span className="legend-dot" style={{ backgroundColor: COLORS.occupied }}></span>
+            <span>Nights occupied <strong>{data.occupied}</strong></span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-dot" style={{ backgroundColor: COLORS.available }}></span>
+            <span>Available <strong>{data.available}</strong></span>
+          </div>
         </div>
       </div>
-      <div className="chart-summary">
-        <div className="summary-item">
-          <span className="label">Occupied:</span>
-          <span className="value">{data.occupied} nights</span>
-        </div>
-        <div className="summary-item">
-          <span className="label">Available:</span>
-          <span className="value">{data.available} nights</span>
-        </div>
-        {data.blocked !== undefined && (
-          <div className="summary-item">
-            <span className="label">Blocked:</span>
-            <span className="value">{data.blocked} nights</span>
-          </div>
-        )}
+      <div className="chart-note">
+        Blocked nights included in occupancy
       </div>
     </div>
   );

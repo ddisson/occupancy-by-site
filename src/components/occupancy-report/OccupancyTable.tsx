@@ -16,97 +16,80 @@ const OccupancyTable: React.FC<OccupancyTableProps> = ({ data, onExportCSV }) =>
     () => [
       {
         field: 'siteName',
-        headerName: 'Site Name',
+        headerName: 'Site', // Match Figma
         sortable: true,
         filter: true,
         pinned: 'left',
-        width: 150,
+        width: 180,
       },
       {
         field: 'siteType',
-        headerName: 'Site Type',
+        headerName: 'Type', // Match Figma
         sortable: true,
         filter: true,
         width: 150,
       },
       {
         field: 'occupancyPercentage',
-        headerName: '% Occupied',
+        headerName: 'Occupied nights, %', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        valueFormatter: params => `${params.value.toFixed(1)}%`,
-        width: 130,
-        cellStyle: { fontWeight: 'bold' },
-      },
-      {
-        field: 'on',
-        headerName: '# Occupied Nights',
-        sortable: true,
-        filter: 'agNumberColumnFilter',
-        width: 160,
+        width: 180,
         cellRenderer: (params: any) => {
-          const percentage = (params.data.on / params.data.an) * 100;
+          const percentage = params.value;
+          const occupiedNights = params.data?.on || 0;
+          const fillWidth = Math.min(percentage, 100);
           return (
-            <div className="bar-cell">
-              <div
-                className="bar-fill"
-                style={{
-                  width: `${percentage}%`,
-                  backgroundColor: '#4CAF50',
-                  height: '20px',
-                  borderRadius: '3px',
-                }}
-              />
-              <span className="bar-text">{params.value}</span>
+            <div className="occupancy-bar-cell">
+              <div className="occupancy-progress-bar">
+                <div
+                  className="occupancy-progress-fill"
+                  style={{ width: `${fillWidth}%` }}
+                />
+              </div>
+              <span className="occupancy-label">{occupiedNights} ({percentage.toFixed(0)}%)</span>
             </div>
           );
         },
       },
       {
         field: 'an',
-        headerName: '# Available Nights',
+        headerName: 'Available', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        width: 170,
+        width: 100,
       },
       {
         field: 'alos',
-        headerName: 'Avg Length of Stay',
+        headerName: 'Av. Length of Stay', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        valueFormatter: params => `${params.value.toFixed(1)} nights`,
-        width: 170,
+        valueFormatter: params => `${params.value.toFixed(0)}`,
+        width: 140,
       },
       {
         field: 'weekendOccupancyPercentage',
-        headerName: '% Occupied Weekend',
+        headerName: 'Occupied Friday and Saturday, %', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        valueFormatter: params => `${params.value.toFixed(1)}%`,
-        width: 180,
-      },
-      {
-        field: 'blockedNights',
-        headerName: '# Blocked Nights',
-        sortable: true,
-        filter: 'agNumberColumnFilter',
-        width: 160,
+        valueFormatter: params => `${Math.floor(params.data.on / 4)}/${Math.ceil(params.data.an / 7)} (${params.value.toFixed(0)}%)`,
+        width: 200,
       },
       {
         field: 'adr',
-        headerName: 'ADR',
+        headerName: 'Average Nightly Rate', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        valueFormatter: params => `$${params.value.toFixed(2)}`,
-        width: 120,
+        valueFormatter: params => `$${params.value.toFixed(0)}`,
+        width: 160,
       },
       {
         field: 'revpar',
-        headerName: 'RevPAR',
+        headerName: 'Revenue per Site', // Match Figma
         sortable: true,
         filter: 'agNumberColumnFilter',
-        valueFormatter: params => `$${params.value.toFixed(2)}`,
-        width: 120,
+        valueFormatter: params => `$${params.value.toFixed(0)}`,
+        width: 140,
       },
     ],
     []

@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   Cell,
+  ResponsiveContainer,
 } from 'recharts';
 import { TrendBucketData, Granularity } from '../../types/occupancy.types';
 import './OccupancyTrendChart.css';
@@ -55,36 +56,37 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
   })), [data]);
 
   // Calculate chart dimensions based on granularity and data count
-  const { chartWidth, barSize, needsScroll } = useMemo(() => {
+  const { chartWidth, barSize, needsScroll, useResponsive } = useMemo(() => {
     const dataCount = chartData.length;
     
-    // Bar widths depend on granularity and whether showing YoY
-    let minBarWidth: number;
+    // For monthly view (12 bars), use responsive container to fill space
     if (granularity === 'monthly') {
-      minBarWidth = showYoY ? 40 : 60; // Wider bars for 12 months
-    } else if (granularity === 'weekly') {
-      minBarWidth = showYoY ? 20 : 28; // Smaller for 52 weeks
-    } else {
-      minBarWidth = showYoY ? 16 : 24; // Smallest for daily
+      return {
+        chartWidth: 0, // Will use ResponsiveContainer
+        barSize: showYoY ? 30 : 50, // Flexible bar size
+        needsScroll: false,
+        useResponsive: true,
+      };
     }
     
-    const groupGap = granularity === 'monthly' ? 24 : 12;
+    // For weekly/daily, calculate minimum width needed
+    let minBarWidth: number;
+    if (granularity === 'weekly') {
+      minBarWidth = showYoY ? 20 : 28;
+    } else {
+      minBarWidth = showYoY ? 16 : 24;
+    }
     
-    // Calculate minimum width needed for all bars
+    const groupGap = 12;
     const barsPerGroup = showYoY ? 2 : 1;
     const groupWidth = (minBarWidth * barsPerGroup) + (showYoY ? 4 : 0) + groupGap;
-    const calculatedWidth = dataCount * groupWidth + 60; // 60px for padding
-    
-    // Container width threshold (approximate visible area minus Y-axis)
-    const containerWidth = 850;
-    
-    // Always scroll for weekly (52 weeks) and daily views
-    const shouldScroll = granularity !== 'monthly' || calculatedWidth > containerWidth;
+    const calculatedWidth = dataCount * groupWidth + 60;
     
     return {
-      chartWidth: Math.max(calculatedWidth, containerWidth),
+      chartWidth: calculatedWidth,
       barSize: minBarWidth,
-      needsScroll: shouldScroll && calculatedWidth > containerWidth,
+      needsScroll: true,
+      useResponsive: false,
     };
   }, [chartData.length, showYoY, granularity]);
 
@@ -147,45 +149,16 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
         </div>
       </div>
 
-      {/* Chart area with sticky Y-axis */}
-      <div className="chart-with-sticky-axis">
-        {/* Fixed Y-axis - always visible */}
-        <div className="sticky-y-axis">
-          <BarChart
-            data={chartData.slice(0, 1)} // Minimal data for Y-axis reference
-            width={Y_AXIS_WIDTH}
-            height={CHART_HEIGHT}
-            margin={{ top: 10, right: 0, left: 0, bottom: bottomMargin }}
-          >
-            <YAxis
-              domain={[0, 100]}
-              tickFormatter={value => `${value}%`}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 11, fill: '#666' }}
-              ticks={[0, 25, 50, 75, 100]}
-              width={Y_AXIS_WIDTH}
-              orientation="left"
-            />
-          </BarChart>
-        </div>
-
-        {/* Scrollable chart area */}
-        <div 
-          className={`chart-scroll-container ${needsScroll ? 'has-scroll' : ''}`}
-          ref={scrollContainerRef}
-        >
-          <div 
-            className="chart-inner" 
-            style={{ width: chartWidth, minWidth: chartWidth }}
-          >
+      {/* Chart area - responsive or scrollable depending on granularity */}
+      {useResponsive ? (
+        // Responsive container for monthly view - fills available space
+        <div className="chart-responsive-container">
+          <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
             <BarChart 
               data={chartData} 
-              width={chartWidth}
-              height={CHART_HEIGHT}
-              margin={{ top: 10, right: 20, left: 0, bottom: bottomMargin }}
+              margin={{ top: 10, right: 20, left: 10, bottom: bottomMargin }}
               barGap={showYoY ? 2 : 0}
-              barCategoryGap={showYoY ? '15%' : '25%'}
+              barCategoryGap={showYoY ? '15%' : '20%'}
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E5E5" />
               <XAxis
@@ -193,17 +166,16 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
                 axisLine={{ stroke: '#E5E5E5' }}
                 tickLine={false}
                 tick={{ fontSize: 11, fill: '#666' }}
-                angle={granularity === 'daily' ? -45 : 0}
-                textAnchor={granularity === 'daily' ? 'end' : 'middle'}
                 interval={0}
               />
-              {/* Hidden Y-axis - just for chart alignment */}
               <YAxis
                 domain={[0, 100]}
+                tickFormatter={value => `${value}%`}
                 axisLine={false}
                 tickLine={false}
-                tick={false}
-                width={0}
+                tick={{ fontSize: 11, fill: '#666' }}
+                ticks={[0, 25, 50, 75, 100]}
+                width={Y_AXIS_WIDTH}
               />
               <Tooltip content={<CustomTooltip />} />
               <Bar 
@@ -225,13 +197,98 @@ const OccupancyTrendChart: React.FC<OccupancyTrendChartProps> = ({
                   name="Previous period"
                   radius={[2, 2, 0, 0]}
                   maxBarSize={barSize}
-                  fill={CHART_COLORS.previousPeriod} // Always same color for previous period
+                  fill={CHART_COLORS.previousPeriod}
                 />
               )}
             </BarChart>
+          </ResponsiveContainer>
+        </div>
+      ) : (
+        // Scrollable container for weekly/daily views
+        <div className="chart-with-sticky-axis">
+          {/* Fixed Y-axis - always visible */}
+          <div className="sticky-y-axis">
+            <BarChart
+              data={chartData.slice(0, 1)}
+              width={Y_AXIS_WIDTH}
+              height={CHART_HEIGHT}
+              margin={{ top: 10, right: 0, left: 0, bottom: bottomMargin }}
+            >
+              <YAxis
+                domain={[0, 100]}
+                tickFormatter={value => `${value}%`}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 11, fill: '#666' }}
+                ticks={[0, 25, 50, 75, 100]}
+                width={Y_AXIS_WIDTH}
+                orientation="left"
+              />
+            </BarChart>
+          </div>
+
+          {/* Scrollable chart area */}
+          <div 
+            className={`chart-scroll-container ${needsScroll ? 'has-scroll' : ''}`}
+            ref={scrollContainerRef}
+          >
+            <div 
+              className="chart-inner" 
+              style={{ width: chartWidth, minWidth: chartWidth }}
+            >
+              <BarChart 
+                data={chartData} 
+                width={chartWidth}
+                height={CHART_HEIGHT}
+                margin={{ top: 10, right: 20, left: 0, bottom: bottomMargin }}
+                barGap={showYoY ? 2 : 0}
+                barCategoryGap={showYoY ? '15%' : '25%'}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E5E5" />
+                <XAxis
+                  dataKey="label"
+                  axisLine={{ stroke: '#E5E5E5' }}
+                  tickLine={false}
+                  tick={{ fontSize: 11, fill: '#666' }}
+                  angle={granularity === 'daily' ? -45 : 0}
+                  textAnchor={granularity === 'daily' ? 'end' : 'middle'}
+                  interval={0}
+                />
+                <YAxis
+                  domain={[0, 100]}
+                  axisLine={false}
+                  tickLine={false}
+                  tick={false}
+                  width={0}
+                />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar 
+                  dataKey="current" 
+                  name="Current period" 
+                  radius={[2, 2, 0, 0]}
+                  maxBarSize={barSize}
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-current-${index}`}
+                      fill={entry.isSelected ? CHART_COLORS.currentPeriod : CHART_COLORS.currentPeriodFaded}
+                    />
+                  ))}
+                </Bar>
+                {showYoY && (
+                  <Bar
+                    dataKey="yoy"
+                    name="Previous period"
+                    radius={[2, 2, 0, 0]}
+                    maxBarSize={barSize}
+                    fill={CHART_COLORS.previousPeriod}
+                  />
+                )}
+              </BarChart>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Legend below the chart */}
       <div className="chart-legend-bottom">
